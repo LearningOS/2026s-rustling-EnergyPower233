@@ -6,13 +6,13 @@
 | functions       | §3.3         | X   |
 | if              | §3.5         | X   |
 | primitive_types | §3.2, §4.3   | X   |
-| vecs            | §8.1         |
-| move_semantics  | §4.1-2       |
+| vecs            | §8.1         | X   |
+| move_semantics  | §4.1-2       | X   |
 | structs         | §5.1, §5.3   | X   |
 | enums           | §6, §18.3    | X   |
 | strings         | §8.2         | X   |
 | modules         | §7           | X   |
-| hashmaps        | §8.3         |
+| hashmaps        | §8.3         | X   |
 | options         | §10.1        |
 | error_handling  | §9           |
 | generics        | §10          |
