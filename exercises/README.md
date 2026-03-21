@@ -13,12 +13,12 @@
 | strings         | §8.2         | X   |
 | modules         | §7           | X   |
 | hashmaps        | §8.3         | X   |
-| options         | §10.1        |
+| options         | §10.1        | X   |
 | error_handling  | §9           | X   |
-| generics        | §10          |
-| traits          | §10.2        |
+| generics        | §10          | X   |
+| traits          | §10.2        | X   |
 | tests           | §11.1        |
-| lifetimes       | §10.3        |
+| lifetimes       | §10.3        | X   |
 | iterators       | §13.2-4      |
 | threads         | §16.1-3      |
 | smart_pointers  | §15, §16.3   |
