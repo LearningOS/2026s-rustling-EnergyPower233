@@ -14,7 +14,7 @@
 | modules         | §7           | X   |
 | hashmaps        | §8.3         | X   |
 | options         | §10.1        |
-| error_handling  | §9           |
+| error_handling  | §9           | X   |
 | generics        | §10          |
 | traits          | §10.2        |
 | tests           | §11.1        |
