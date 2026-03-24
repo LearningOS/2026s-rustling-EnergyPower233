@@ -49,6 +49,7 @@ impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
     }
+    
 }
 
 // Slice implementation
