@@ -14,11 +14,9 @@ use std::f32;
 fn main() {
     let pi: f32 = f32::consts::PI;
     let radius: f32 = 5.00f32;
-    asdfghjkl;
     let area: f32 = pi * f32::powi(radius, 2);
-    self::println!(
+    println!(
         "The area of a circle with radius {:.2} is {:.5}!",
-        radius,
-        area
+        radius, area
     )
 }
