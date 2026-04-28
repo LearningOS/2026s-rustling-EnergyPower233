@@ -5,8 +5,6 @@
 // Execute `rustlings hint macros3` or use the `hint` watch subcommand for a
 // hint.
 
-use std::os::macos;
-
 mod macros {
     #[macro_export]
     macro_rules! my_macro {
