@@ -5,7 +5,7 @@
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
-use std::vec::*;
+use std::{mem, vec::*};
 
 #[derive(Debug)]
 struct Node<T> {
@@ -72,7 +72,30 @@ impl<T> LinkedList<T> {
         }
     }
     pub fn reverse(&mut self) {
-        // TODO
+        let mut n = self.start;
+        let mut start = self.start;
+        if n.is_none() {
+            return;
+        }
+        loop {
+            unsafe {
+                if (*n.unwrap().as_ptr()).next == None {
+                    mem::swap(
+                        &mut (*n.unwrap().as_ptr()).next,
+                        &mut (*n.unwrap().as_ptr()).prev,
+                    );
+                    break;
+                }
+                mem::swap(
+                    &mut (*n.unwrap().as_ptr()).next,
+                    &mut (*n.unwrap().as_ptr()).prev,
+                );
+
+                n = (*n.unwrap().as_ptr()).prev;
+            }
+        }
+        self.start = n;
+        self.end = start;
     }
 }
 

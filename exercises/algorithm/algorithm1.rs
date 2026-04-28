@@ -1,4 +1,5 @@
 /*
+AC
     single linked list merge
     This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
@@ -65,12 +66,86 @@ impl<T> LinkedList<T> {
             },
         }
     }
-    pub fn merge(mut list_a: LinkedList<T>, mut list_b: LinkedList<T>) -> Self {
-        Self
+    pub fn merge(mut list_a: LinkedList<T>, mut list_b: LinkedList<T>) -> Self
+    where
+        T: PartialOrd,
+    {
+        let mut merge: LinkedList<T> = LinkedList::new();
+        merge.length = list_a.length + list_b.length;
+        let mut merge_start: Option<NonNull<Node<T>>> = None;
+        let mut merge_end: Option<NonNull<Node<T>>> = None;
+        let mut a_ptr: Option<NonNull<Node<T>>> = list_a.start;
+        let mut b_ptr: Option<NonNull<Node<T>>> = list_b.start;
+
+        loop {
+            match (a_ptr, b_ptr) {
+                (Some(a), Some(b)) => unsafe {
+                    let a_val = &((*(a.as_ptr())).val);
+                    let b_val = &((*(b.as_ptr())).val);
+
+                    let next;
+                    if a_val <= b_val {
+                        next = a;
+                        a_ptr = (*(a.as_ptr())).next;
+                    } else {
+                        next = b;
+                        b_ptr = (*(b.as_ptr())).next;
+                    }
+
+                    (*(next.as_ptr())).next = None;
+
+                    match merge_end {
+                        None => {
+                            merge_start = Some(next);
+                            merge_end = Some(next);
+                        }
+                        Some(end) => {
+                            (*(end.as_ptr())).next = Some(next);
+                            merge_end = Some(next);
+                        }
+                    }
+                },
+
+                (Some(a), None) => unsafe {
+                    match merge_end {
+                        None => {
+                            merge_start = Some(a);
+                        }
+                        Some(end) => {
+                            (*(end.as_ptr())).next = Some(a);
+                        }
+                    }
+                    merge_end = list_a.end;
+                    break;
+                },
+
+                (None, Some(b)) => unsafe {
+                    match merge_end {
+                        None => {
+                            merge_start = Some(b);
+                        }
+                        Some(end) => {
+                            (*(end.as_ptr())).next = Some(b);
+                        }
+                    }
+                    merge_end = list_b.end;
+                    break;
+                },
+
+                (None, None) => {
+                    break;
+                }
+            }
+        }
+
+        merge.start = merge_start;
+        merge.end = merge_end;
+
+        merge
     }
 }
 
-impl<T> Display for LinkedList<T> {
+impl<T: Display> Display for LinkedList<T> {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match self.start {
             Some(node) => write!(f, "{}", unsafe { node.as_ref() }),

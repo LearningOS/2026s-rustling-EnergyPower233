@@ -4,8 +4,30 @@
     you can use bubble sorting, insertion sorting, heap sorting, etc.
 */
 
-fn sort<T>(array: &mut [T]) {
-    //TODO
+use std::mem::swap;
+
+fn sort<T: std::cmp::PartialOrd>(array: &mut [T]) {
+    if array.len() <= 1 {
+        return;
+    }
+    let mut lt = 0;
+    let mut gt = array.len() - 1;
+    let mut curr = 1;
+
+    while curr <= gt {
+        if array[curr] < array[lt] {
+            array.swap(curr, lt);
+            lt += 1;
+            curr += 1;
+        } else if array[curr] > array[lt] {
+            array.swap(curr, gt);
+            gt -= 1;
+        } else {
+            curr += 1;
+        }
+    }
+    sort(&mut array[0..lt]);
+    sort(&mut array[gt + 1..]);
 }
 #[cfg(test)]
 mod tests {

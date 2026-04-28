@@ -36,7 +36,27 @@ where
     }
 
     pub fn add(&mut self, value: T) {
-        //TODO
+        // 1. 新员工入职，排在公司最末尾
+        self.items.push(value);
+        self.count += 1; // 公司总人数加 1
+
+        let mut current_idx = self.count;
+
+        // 2. 只要还没爬到 CEO 的位置 (idx > 1)，就尝试挑战直系主管
+        while current_idx > 1 {
+            let parent_idx = self.parent_idx(current_idx);
+
+            // 如果新员工 比 主管 更符合老板要求（在最小堆里就是值更小，最大堆就是值更大）
+            if (self.comparator)(&self.items[current_idx], &self.items[parent_idx]) {
+                // 篡位！互换工位
+                self.items.swap(current_idx, parent_idx);
+                // 现在新员工坐到了主管的位置，准备继续挑战下一任主管
+                current_idx = parent_idx;
+            } else {
+                // 遇到比自己强的主管了，挑战结束，老实干活
+                break;
+            }
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -56,8 +76,16 @@ where
     }
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
-        //TODO
-        0
+        let left = self.left_child_idx(idx);
+        let right = self.right_child_idx(idx);
+
+        // 如果存在右节点，并且右节点 比 左节点 更符合优先要求
+        if right <= self.count && (self.comparator)(&self.items[right], &self.items[left]) {
+            right
+        } else {
+            // 否则就选左节点（可能只有左节点，或者左节点更强）
+            left
+        }
     }
 }
 
@@ -83,8 +111,39 @@ where
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
-        //TODO
-        None
+        // 如果公司破产（没人了），直接返回 None
+        if self.count == 0 {
+            return None;
+        }
+
+        // 1. 把 CEO (下标 1) 和 最底层的实习生 (下标 count) 互换位置
+        self.items.swap(1, self.count);
+
+        // 2. 原来的 CEO 现在在数组末尾，我们把他踢出局并记录下来准备返回
+        let result = self.items.pop();
+        self.count -= 1; // 公司总人数减 1
+
+        // 3. 现在的假 CEO (原实习生) 坐在下标 1 的位置，开始降级流程
+        let mut current_idx = 1;
+
+        // 只要他还有直系下属，就面临被下属篡位的风险
+        while self.children_present(current_idx) {
+            // 找出两个下属里比较强的那个
+            let child_idx = self.smallest_child_idx(current_idx);
+
+            // 如果最强的下属 比 假 CEO 还要强
+            if (self.comparator)(&self.items[child_idx], &self.items[current_idx]) {
+                // 假 CEO 降级，最强下属升职
+                self.items.swap(current_idx, child_idx);
+                current_idx = child_idx;
+            } else {
+                // 假 CEO 居然比最强的下属还强，稳住阵脚，降级结束
+                break;
+            }
+        }
+
+        // 4. 返回真正离职的那个老 CEO
+        result
     }
 }
 
